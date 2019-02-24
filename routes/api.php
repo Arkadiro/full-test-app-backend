@@ -28,14 +28,19 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+
     Route::post('user', 'UsersController@getUser');
     Route::post('users', 'UsersController@getUsers');
     Route::put('update/user', 'UsersController@updateUser');
+
     Route::post('jokes', 'ContentController@getJokes');
     Route::post('addjoke', 'ContentController@addJoke');
+    Route::post('user/jokes', 'ContentController@getUserJokes');
 
     Route::post('follow', 'FollowController@addFollow');
     Route::post('isfollow', 'FollowController@showFollow');
     Route::post('unfollow', 'FollowController@deleteFollow');
+
+    Route::post('testfollow', 'FollowController@testFollow');
 
 });

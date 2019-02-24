@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Joke;
 
@@ -13,6 +14,13 @@ class ContentController extends Controller
         return response()->json(['data' => $user]);
     }
 
+    public function getUserJokes(Request $request){
+        $joke = new Joke;
+        // return $request->input('id');
+        $jokes = $joke->getJokes($request->input('id'));
+        return response()->json($jokes);
+    }
+
     public function getJokes(Request $request){
         $jokes = Joke::all();
         return response()->json($jokes);
@@ -23,6 +31,7 @@ class ContentController extends Controller
         $joke->title = $request->input('title');
         $joke->body = $request->input('body');
         $joke->author = $request->input('author');
+        $joke->user_id = $request->input('id');
 
        $joke->save();
 
