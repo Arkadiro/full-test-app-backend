@@ -105,7 +105,12 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
             // 'user' => auth()->user()->name,
             // 'email' => auth()->user()->email,
-            'data' => ['id' => auth()->user()->id, 'name' => auth()->user()->name, 'email' => auth()->user()->email]
+            'data' => [
+                'id' => auth()->user()->id,
+                'name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+                'joined' => date_format(auth()->user()->created_at, 'Y-m-d')
+                ]
         ]);
     }
 }

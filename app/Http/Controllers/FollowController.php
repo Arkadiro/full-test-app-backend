@@ -12,18 +12,6 @@ class FollowController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showFollow(Request $request)
-    {
-        $value = 'false';
-        $follows = Follow::all();
-        foreach ($follows as $follow) {
-            if (($follow->user == $request->input('followModel.user')) && ($follow->follower == $request->input('followModel.follower'))) {
-                return $value = 'true';
-            }
-        }
-
-        return response()->json($value);
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -32,22 +20,17 @@ class FollowController extends Controller
      */
     public function addFollow(Request $request)
     {
-        $exist = 'false';
         $follow = new Follow;
-        $follows = Follow::all();
-        foreach ($follows as $follow) {
-            if (($follow->user == $request->input('followModel.user')) && ($follow->follower == $request->input('followModel.follower'))) {
-                return $exist = 'true';
+        $result = $follow->getFollowers($request->input('followModel.user'));
+        foreach($result as $followers) {
+            if ($followers == $request->input('followModel.follower')) {
+                return response()->json(true);
             }
         }
-
-        if($exist == 'false'){
-            $follower = Follow::find($request->input('follower.id'));
-            $follow->user = $request->input('followModel.user');
-            $follow->follower = $request->input('followModel.follower');
-            $follow->save();
-        }
-
+        $follower = Follow::find($request->input('followModel.id'));
+        $follow->user = $request->input('followModel.user');
+        $follow->follower = $request->input('followModel.follower');
+        $follow->save();
         return response()->json($follow);
     }
 
@@ -61,6 +44,18 @@ class FollowController extends Controller
         }
         $message = 'success';
         return response()->json($message);
+    }
+
+    public function testFollow(Request $request)
+    {
+        $follow = new Follow;
+        $followers = $follow->getFollowers($request->input('followModel.user'));
+        foreach($followers as $follower) {
+            if ($follower == $request->input('followModel.follower')) {
+                return response()->json(true);
+            }
+        }
+        return response()->json(false);
     }
 
 }
